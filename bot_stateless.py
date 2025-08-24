@@ -1,5 +1,3 @@
-# 8412334138:AAEnurI-CtfKDZrFxqW-V9TzgTCvP3y0hx8
-
 import os
 import time
 import re
@@ -7,9 +5,8 @@ import pyotp
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes, filters
 
-# --- Helper ---
 def clean_secret(text: str):
-    text = re.sub(r"[^A-Z2-7]", "", text.upper())  # keep base32 chars only
+    text = re.sub(r"[^A-Z2-7]", "", text.upper())
     return text if text else None
 
 def generate_totp(secret: str):
@@ -18,7 +15,6 @@ def generate_totp(secret: str):
     remaining = 30 - (int(time.time()) % 30)
     return code, remaining
 
-# --- Command Handlers ---
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "👋 Kirim secret TOTP (contoh: `TBTM MIVF YE2B ...`) dan saya akan balas dengan 6-digit kode.\n\n"
@@ -35,9 +31,8 @@ async def handle_secret(update: Update, context: ContextTypes.DEFAULT_TYPE):
     code, remain = generate_totp(secret)
     await update.message.reply_text(f"🔐 Code: *{code}*\n⏳ Berlaku {remain}s", parse_mode="Markdown")
 
-# --- Main Bot ---
 def main():
-    token = os.getenv("8412334138:AAEnurI-CtfKDZrFxqW-V9TzgTCvP3y0hx8")
+    token = os.getenv("TELEGRAM_BOT_TOKEN")
     if not token:
         raise SystemExit("❌ Set TELEGRAM_BOT_TOKEN environment variable dulu!")
 
